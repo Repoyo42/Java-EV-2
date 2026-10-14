@@ -2,6 +2,7 @@ package com.InventarioService.Inventario_service.Controller;
 
 import com.InventarioService.Inventario_service.Model.Producto;
 import com.InventarioService.Inventario_service.Service.ProductoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class ProductoController {
     }
 
     @PostMapping
-    public ResponseEntity<Producto> crear(@RequestBody Producto producto) {
+    public ResponseEntity<Producto> crear(@Valid @RequestBody Producto producto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(service.guardar(producto));
     }
@@ -38,7 +39,7 @@ public class ProductoController {
     @PutMapping("/{id}")
     public ResponseEntity<Producto> actualizar(
             @PathVariable Long id,
-            @RequestBody Producto datos) {
+            @Valid @RequestBody Producto datos) {
 
         return service.actualizar(id, datos)
                 .map(ResponseEntity::ok)

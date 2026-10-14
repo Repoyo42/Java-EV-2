@@ -1,18 +1,23 @@
 package com.InventarioService.Inventario_service.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
 public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
     @Column(nullable = false, unique = true)
     private String sku;
+    @NotBlank
     @Column(nullable = false)
-
     private String nombre;
     private String descripcion;
+    @PositiveOrZero
+    @Column(nullable = false)
     private int cantidad;
 
     public Producto(Long id, String sku, String nombre, String descripcion, int cantidad) {
