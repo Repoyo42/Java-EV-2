@@ -52,6 +52,24 @@ Se requiere Java 17 o superior y MySQL para la ejecución normal. Las pruebas us
 
 Las bases predeterminadas son `inventario_db`, `usuarios_db`, `ordenes_db` y `despacho_db`. Se pueden cambiar mediante `INVENTARIO_DB_URL`, `USUARIOS_DB_URL`, `ORDENES_DB_URL` y `DESPACHO_DB_URL`. `DB_USERNAME` y `DB_PASSWORD` permiten configurar las credenciales compartidas; por defecto son `root` y `1234`.
 
+## Ejecución con Docker
+
+Con Docker Desktop y Docker Compose se levantan los 4 microservicios junto a sus 4 bases MySQL:
+
+```powershell
+docker compose up -d --build   # construye las imágenes y levanta todo
+docker compose ps              # estado de contenedores
+docker compose down            # detiene los contenedores (conserva los datos)
+docker compose down -v         # detiene y borra también las bases de datos
+```
+
+| Servicio | URL |
+| --- | --- |
+| Inventario | http://localhost:6767/inventario |
+| Usuarios | http://localhost:6768/usuarios |
+| Órdenes | http://localhost:6769/ordenes |
+| Despacho | http://localhost:6770/despachos |
+
 ## Endpoints principales
 
 | Servicio | Operaciones |
