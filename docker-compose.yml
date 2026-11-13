@@ -1,0 +1,108 @@
+services:
+  # ---------- Bases de datos ----------
+  usuarios-db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_DATABASE: usuarios_db
+    volumes:
+      - usuarios_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p1234"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  inventario-db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_DATABASE: inventario_db
+    volumes:
+      - inventario_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p1234"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  ordenes-db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_DATABASE: ordenes_db
+    volumes:
+      - ordenes_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p1234"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  despacho-db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_DATABASE: despacho_db
+    volumes:
+      - despacho_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p1234"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # ---------- Microservicios ----------
+  usuarios-service:
+    build: ./Services/Usuarios-Service
+    ports:
+      - "6768:6768"
+    environment:
+      USUARIOS_DB_URL: jdbc:mysql://usuarios-db:3306/usuarios_db
+      DB_USERNAME: root
+      DB_PASSWORD: "1234"
+    depends_on:
+      usuarios-db:
+        condition: service_healthy
+
+  inventario-service:
+    build: ./Services/Inventario-service
+    ports:
+      - "6767:6767"
+    environment:
+      INVENTARIO_DB_URL: jdbc:mysql://inventario-db:3306/inventario_db
+      DB_USERNAME: root
+      DB_PASSWORD: "1234"
+    depends_on:
+      inventario-db:
+        condition: service_healthy
+
+  ordenes-service:
+    build: ./Services/Ordenes-service
+    ports:
+      - "6769:6769"
+    environment:
+      ORDENES_DB_URL: jdbc:mysql://ordenes-db:3306/ordenes_db
+      DB_USERNAME: root
+      DB_PASSWORD: "1234"
+    depends_on:
+      ordenes-db:
+        condition: service_healthy
+
+  despacho-service:
+    build: ./Services/Despacho-Service
+    ports:
+      - "6770:6770"
+    environment:
+      DESPACHO_DB_URL: jdbc:mysql://despacho-db:3306/despacho_db
+      DB_USERNAME: root
+      DB_PASSWORD: "1234"
+    depends_on:
+      despacho-db:
+        condition: service_healthy
+
+volumes:
+  usuarios_data:
+  inventario_data:
+  ordenes_data:
+  despacho_data:
